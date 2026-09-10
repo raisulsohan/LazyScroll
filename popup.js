@@ -28,6 +28,12 @@ const quickVal   = document.getElementById("quickVal");
 const presetsEl  = document.getElementById("presets");
 const presetBtns = [...presetsEl.querySelectorAll("button")];
 
+const customVolEl = document.getElementById("customVol");
+const setBtnEl    = document.getElementById("setBtn");
+const resetBtnEl  = document.getElementById("resetBtn");
+const resetMenuEl = document.getElementById("resetMenu");
+const resetItems  = [...resetMenuEl.querySelectorAll("button")];
+
 function fmt(pct) {
   let s;
   if (Math.round(pct) === pct) s = String(pct);
@@ -73,6 +79,15 @@ function renderQuick() {
     b.disabled = noTarget;
     b.classList.toggle("on", !noTarget && v != null && Math.abs(target - v) < 1e-6);
   });
+
+  setBtnEl.disabled = noTarget;
+  resetBtnEl.disabled = noTarget;
+  if (noTarget) {
+    customVolEl.disabled = true;
+    resetMenuEl.classList.remove("open");
+  } else {
+    customVolEl.disabled = false;
+  }
 }
 
 presetsEl.addEventListener("click", (e) => {
@@ -93,6 +108,63 @@ nightEl.addEventListener("change", () => {
   state.nightOn = nightEl.checked;
   chrome.storage.local.set({ [NIGHT_KEY]: state.nightOn });
   renderQuick();
+});
+
+// ---- Custom volume input ----
+customVolEl.addEventListener("input", () => {
+  const raw = customVolEl.value.trim();
+  if (raw === "") {
+    customVolEl.classList.remove("invalid");
+    setBtnEl.disabled = true;
+    return;
+  }
+  const pct = parseFloat(raw);
+  const valid = !isNaN(pct) && pct >= 0 && pct <= 100;
+  customVolEl.classList.toggle("invalid", !valid);
+  setBtnEl.disabled = !valid || (!state.nightOn && !state.host);
+});
+
+setBtnEl.addEventListener("click", () => {
+  const pct = parseFloat(customVolEl.value);
+  if (isNaN(pct) || pct < 0 || pct > 100) return;
+  const v = pct / 100;
+  if (state.nightOn) {
+    state.nightVol = v;
+    chrome.storage.local.set({ [NIGHTVOL_KEY]: v });
+  } else {
+    state.siteVol = v;
+    chrome.storage.local.set({ [state.volKey]: v });
+  }
+  customVolEl.value = "";
+  customVolEl.classList.remove("invalid");
+  setBtnEl.disabled = true;
+  renderQuick();
+});
+
+// ---- Reset dropdown ----
+resetBtnEl.addEventListener("click", (e) => {
+  e.stopPropagation();
+  if (resetBtnEl.disabled) return;
+  resetMenuEl.classList.toggle("open");
+});
+
+resetMenuEl.addEventListener("click", (e) => {
+  const btn = e.target.closest("button");
+  if (!btn) return;
+  const v = parseFloat(btn.dataset.p);
+  if (state.nightOn) {
+    state.nightVol = v;
+    chrome.storage.local.set({ [NIGHTVOL_KEY]: v });
+  } else {
+    state.siteVol = v;
+    chrome.storage.local.set({ [state.volKey]: v });
+  }
+  resetMenuEl.classList.remove("open");
+  renderQuick();
+});
+
+document.addEventListener("click", () => {
+  resetMenuEl.classList.remove("open");
 });
 
 // ---- Global Settings ----

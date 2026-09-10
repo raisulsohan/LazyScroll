@@ -59,6 +59,46 @@
   .presets button.on { background: #7c5cff; border-color: #7c5cff; color: #fff; }
   .presets button:disabled { opacity: .4; cursor: not-allowed; }
   .night-on .value { color: #b9a6ff; }
+  .custom-row {
+    display: flex; align-items: center; gap: 5px;
+    margin-top: 8px;
+  }
+  .custom-input {
+    width: 58px; padding: 5px 6px;
+    background: #2a2a30; color: #e8e8ea; border: 1px solid #4a4a52;
+    border-radius: 5px; font-size: 11px; font-family: inherit;
+    outline: none; transition: border-color .15s;
+    -moz-appearance: textfield;
+  }
+  .custom-input::-webkit-outer-spin-button,
+  .custom-input::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
+  .custom-input:focus { border-color: #7c5cff; }
+  .custom-input.invalid { border-color: #ff5c5c; }
+  .set-btn, .reset-btn {
+    padding: 5px 10px;
+    background: #3a3a40; color: #e8e8ea; border: 1px solid #4a4a52;
+    border-radius: 5px; font-size: 10.5px; font-family: inherit;
+    cursor: pointer; white-space: nowrap;
+    transition: background .15s, border-color .15s;
+  }
+  .set-btn:hover, .reset-btn:hover { background: #46464e; }
+  .set-btn:disabled, .reset-btn:disabled { opacity: .4; cursor: not-allowed; }
+  .set-btn.active { background: #7c5cff; border-color: #7c5cff; color: #fff; }
+  .reset-wrap { position: relative; margin-left: auto; }
+  .reset-menu {
+    display: none; position: absolute; bottom: calc(100% + 4px); right: 0;
+    background: #2a2a30; border: 1px solid #4a4a52; border-radius: 6px;
+    padding: 4px 0; z-index: 10; min-width: 100px;
+    box-shadow: 0 4px 12px rgba(0,0,0,.5);
+  }
+  .reset-menu.open { display: block; }
+  .reset-menu button {
+    display: block; width: 100%; padding: 6px 14px;
+    background: none; color: #e8e8ea; border: none;
+    font-size: 11px; font-family: inherit; text-align: left;
+    cursor: pointer; transition: background .12s;
+  }
+  .reset-menu button:hover { background: #3a3a40; }
   .hint {
     font-size: 11px; color: #76767c; line-height: 1.5;
     margin-top: 18px; padding-top: 12px; border-top: 1px solid #313137;
@@ -129,6 +169,23 @@
       <button data-p="0.01">1</button>
     </div>
     <div class="sub" style="text-align: center; margin-top: 5px;">levels in %</div>
+
+    <div class="custom-row">
+      <input type="number" id="customVol" class="custom-input"
+             placeholder="%" min="0" max="100" step="any">
+      <button id="setBtn" class="set-btn" disabled>Set</button>
+      <div class="reset-wrap">
+        <button id="resetBtn" class="reset-btn" disabled>Reset ▾</button>
+        <div class="reset-menu" id="resetMenu">
+          <button data-p="0.00125">0.125%</button>
+          <button data-p="0.001875">0.1875%</button>
+          <button data-p="0.0025">0.25%</button>
+          <button data-p="0.00375">0.375%</button>
+          <button data-p="0.005">0.5%</button>
+          <button data-p="0.01">1%</button>
+        </div>
+      </div>
+    </div>
   </div>
 
   <div class="site-block">
