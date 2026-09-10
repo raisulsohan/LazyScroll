@@ -6,10 +6,7 @@ QuietScroll is a lightweight Chrome/Edge extension that lets you control the
 volume of any video or audio player with your mouse wheel — and remembers your
 preferred volume separately for every website.
 
-document that pure Web-Audio-API players (Spotify,
-  SoundCloud) are not supported — they route audio outside
-  <video>/<audio> entirely; users fall back to the site's own
-  volume control there.
+> **Note:** Pure Web-Audio-API players (Spotify, SoundCloud) are not supported — they route audio outside `<video>`/`<audio>` entirely; users fall back to the site's own volume control there.
 
 ## Features
 
@@ -18,6 +15,8 @@ document that pure Web-Audio-API players (Spotify,
 * **Ultra-low volume** — go as quiet as 0.125%, ideal for late-night listening
 * **Night mode** — one switch drops every site to a single quiet level, and switches back
 * **Quick presets** — jump straight to 0.125% / 0.1875% / 0.25% / 0.375% / 0.5% / 1% from the popup
+* **Custom volume input** — enter any custom volume percentage (0%–100%) and set it instantly
+* **Preset reset menu** — easily reset your volume to any of the 6 presets with one click
 * **Adjustable step** — choose how much each scroll changes the volume (0.5%–10%)
 * **Reverse direction** — optionally flip scroll-up / scroll-down
 * **Per-site on/off** — disable the extension on any site you choose
@@ -45,16 +44,16 @@ to its own remembered volume.
   switching it off restores them exactly
 * Scrolling the wheel during night mode tunes the **night level** itself, and
   the overlay shows a 🌙 so you can tell which one you are changing
-* The quick presets set the night level while night mode is on, and the current
+* The quick presets and custom volume set the night level while night mode is on, and the current
   site's volume otherwise
 * Sites you turned off under **Extension active** stay untouched
 
-## Quick Presets
+## Quick Presets & Custom Volume
 
-The popup has six one-click levels, all in the ultra-low range where scrolling
-notch by notch is slowest: **0.125%**, **0.1875%**, **0.25%**, **0.375%**, **0.5%** and
-**1%**. The buttons show bare numbers to fit the popup width; hover one to see
-its full value.
+The popup provides fast, precise volume control:
+* **One-Click Presets:** Six ultra-low levels where scrolling notch-by-notch is slowest: **0.125%**, **0.1875%**, **0.25%**, **0.375%**, **0.5%**, and **1%**. The buttons display compact numbers to fit neatly; hover over any button to see the tooltip.
+* **Custom Value Input:** Need a specific number? Type any exact percentage (e.g., `0.35` or `12`) into the input box and click **Set**.
+* **Reset ▾ Menu:** Click the Reset dropdown anytime to quickly reset your volume back to any preset level.
 
 ## Settings
 
@@ -65,6 +64,7 @@ Open the popup (toolbar icon) to adjust:
 * **Reverse wheel direction** — scroll down to increase volume
 * **Night mode** — hold every site at one quiet level
 * **Quick presets** — 0.125% / 0.1875% / 0.25% / 0.375% / 0.5% / 1%
+* **Custom volume & Reset** — input exact volume percentage or reset to a preset
 * **This site: Extension active** — turn QuietScroll on/off for the current site
 
 ## A Note on Volume Guard

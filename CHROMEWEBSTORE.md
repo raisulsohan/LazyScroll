@@ -1,7 +1,7 @@
 # Chrome Web Store Listing — QuietScroll
 
-> Last Updated: 2026-09-04  
-> Extension Version: 1.7  
+> Last Updated: 2026-09-10  
+> Extension Version: 2.0  
 > Author: Raisul Sohan (https://raisulsohan.com/)
 
 ---
@@ -24,6 +24,8 @@ KEY FEATURES:
 - Ultra-Low Night Listening: Scroll down as quiet as 0.125% for ultra-sensitive headphones and late-night listening.
 - One-Click Night Mode: Flip Night Mode to instantly lower every website to a gentle, quiet level without losing individual site preferences.
 - Quick Presets: Instant one-click presets for ultra-low volume levels: 0.125%, 0.1875%, 0.25%, 0.375%, 0.5%, and 1%.
+- Custom Volume Input: Type any custom percentage (0% to 100%) and apply it immediately.
+- Preset Reset Menu: Easily reset your volume back to any preset level with a single click.
 - Volume Guard: Prevents autoplay-heavy websites from forcibly overriding your custom volume level.
 - Per-Site Toggle: Easily enable or disable the extension on any specific site with a single click.
 - Completely Private: Operates 100% offline. All settings are stored locally on your device. Zero tracking, zero telemetry.
