@@ -1,26 +1,26 @@
-# Chrome Web Store Listing — QuietScroll
+# Chrome Web Store Listing — LazyScroll
 
 > Last Updated: 2026-09-10  
 > Extension Version: 2.0  
-> Author: Raisul Sohan (https://raisulsohan.com/)
+> Author: Made by Raisul Sohan (https://raisulsohan.com)
 
 ---
 
 ## Store Listing Metadata
 
 **Extension Name**  
-QuietScroll
+LazyScroll
 
 **Short Description** (128 characters)  
 Smart per-site volume control with Alt + Wheel. Features night mode, ultra-low presets, and volume guard for peaceful browsing.
 
 **Detailed Description** (Formatted for Chrome Web Store)  
 ```text
-Take complete control of web audio with your mouse wheel. QuietScroll lets you adjust the volume of any video or audio player using Alt + Mouse Wheel, and automatically remembers your preferred volume separately for every website.
+Take complete control of web audio with your mouse wheel. LazyScroll lets you adjust the volume of any video or audio player using Alt + Mouse Wheel, and automatically remembers your preferred volume separately for every website.
 
 KEY FEATURES:
 - Alt + Mouse Wheel Volume Control: Hold Alt and scroll over any video/audio player to adjust volume smoothly. Normal scrolling remains completely unaffected.
-- Per-Site Volume Memory: Set your desired level once; QuietScroll remembers it every time you visit that domain.
+- Per-Site Volume Memory: Set your desired level once; LazyScroll remembers it every time you visit that domain.
 - Ultra-Low Night Listening: Scroll down as quiet as 0.125% for ultra-sensitive headphones and late-night listening.
 - One-Click Night Mode: Flip Night Mode to instantly lower every website to a gentle, quiet level without losing individual site preferences.
 - Quick Presets: Instant one-click presets for ultra-low volume levels: 0.125%, 0.1875%, 0.25%, 0.375%, 0.5%, and 1%.
@@ -37,9 +37,9 @@ HOW TO USE:
 4. Click the extension toolbar icon anytime to access presets, step size adjustments, and Night Mode.
 
 PERMISSIONS & PRIVACY:
-QuietScroll respects your privacy. It does not collect, store, or transmit any personal data, browsing history, or analytics. Everything stays strictly inside your browser.
+LazyScroll respects your privacy. It does not collect, store, or transmit any personal data, browsing history, or analytics. Everything stays strictly inside your browser.
 
-Developed by Raisul Sohan (https://raisulsohan.com/).
+Made by Raisul Sohan (https://raisulsohan.com).
 ```
 
 **Category**  
@@ -82,10 +82,10 @@ Chrome Web Store review requires an explicit, plain-English justification for ea
 ## Privacy & Data Use Disclosure (For Developer Dashboard)
 
 **Privacy Policy URL for Dashboard:**  
-`https://github.com/raisulsohan/QuietScroll/blob/main/PRIVACY.md`
+`https://github.com/raisulsohan/LazyScroll/blob/main/PRIVACY.md`
 
 **Does the extension collect user data?**  
-**NO** — QuietScroll collects zero user data.
+**NO** — LazyScroll collects zero user data.
 
 - **Personally Identifiable Information**: Not collected.
 - **Health Information**: Not collected.

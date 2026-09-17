@@ -1,8 +1,8 @@
-# QuietScroll
+# LazyScroll
 
 Smart per-site volume control for peaceful browsing.
 
-QuietScroll is a lightweight Chrome/Edge extension that lets you control the
+LazyScroll is a lightweight Chrome/Edge extension that lets you control the
 volume of any video or audio player with your mouse wheel — and remembers your
 preferred volume separately for every website.
 
@@ -31,7 +31,7 @@ player to change the volume.
 
 `Alt + Mouse Wheel`
 
-QuietScroll remembers the volume you set for each website, so the next time you
+LazyScroll remembers the volume you set for each website, so the next time you
 visit, it starts where you left off.
 
 ## Night Mode
@@ -65,11 +65,11 @@ Open the popup (toolbar icon) to adjust:
 * **Night mode** — hold every site at one quiet level
 * **Quick presets** — 0.125% / 0.1875% / 0.25% / 0.375% / 0.5% / 1%
 * **Custom volume & Reset** — input exact volume percentage or reset to a preset
-* **This site: Extension active** — turn QuietScroll on/off for the current site
+* **This site: Extension active** — turn LazyScroll on/off for the current site
 
 ## A Note on Volume Guard
 
-While QuietScroll is active on a site, it keeps the volume locked to your
+While LazyScroll is active on a site, it keeps the volume locked to your
 chosen level — so the site's own volume slider may not take effect. If you want
 to use a site's native volume controls instead, turn off **Extension active**
 for that site in the popup.
@@ -80,7 +80,7 @@ for that site in the popup.
 * Microsoft Edge
 * Brave
 
-Requires a Chromium-based browser, version 111 or newer (QuietScroll relies on
+Requires a Chromium-based browser, version 111 or newer (LazyScroll relies on
 `MAIN`-world content scripts for the Volume Guard).
 
 ## Installation
@@ -89,12 +89,12 @@ Requires a Chromium-based browser, version 111 or newer (QuietScroll relies on
 2. Open `chrome://extensions`
 3. Enable **Developer mode**
 4. Click **Load unpacked**
-5. Select the QuietScroll folder
+5. Select the LazyScroll folder
 
 ## Privacy Policy
 
-QuietScroll does not collect or transmit any user data. Read our full [Privacy Policy](PRIVACY.md).
+LazyScroll does not collect or transmit any user data. Read our full [Privacy Policy](PRIVACY.md).
 
 ## Author
 
-Made by [Raisul Sohan](https://raisulsohan.com/)
+Made by [Raisul Sohan](https://raisulsohan.com)
