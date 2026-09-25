@@ -20,6 +20,7 @@ Take complete control of web audio with your mouse wheel. LazyScroll lets you ad
 
 KEY FEATURES:
 - Alt + Mouse Wheel Volume Control: Hold Alt and scroll over any video/audio player to adjust volume smoothly. Normal scrolling remains completely unaffected.
+- Modern Web Players: Works with players built as web components, such as Reddit's. Videos a site adds later, like the next post in a feed, start at your volume instead of 100%.
 - Web Audio Support: Also controls pages that play sound without a video or audio element, such as canvas animations, games and custom players. Audio a page renders offline for export keeps its full volume.
 - Local HTML Files: Works on HTML pages opened straight from your computer. All local files share one remembered volume.
 - Per-Site Volume Memory: Set your desired level once; LazyScroll remembers it every time you visit that domain.
@@ -28,7 +29,7 @@ KEY FEATURES:
 - Quick Presets: Instant one-click presets for ultra-low volume levels: 0.125%, 0.1875%, 0.25%, 0.375%, 0.5%, and 1%.
 - Custom Volume Input: Type any custom percentage (0% to 100%) and apply it immediately.
 - Preset Reset Menu: Easily reset your volume back to any preset level with a single click.
-- Volume Guard: Prevents autoplay-heavy websites from forcibly overriding your custom volume level.
+- Volume Guard: Prevents autoplay-heavy websites from forcibly overriding your custom volume level. Once you have clicked or pressed a key on the page, muted autoplay videos are unmuted at your level.
 - Per-Site Toggle: Easily enable or disable the extension on any specific site with a single click.
 - Completely Private: Operates 100% offline. All settings are stored locally on your device. Zero tracking, zero telemetry.
 
@@ -82,7 +83,7 @@ Chrome Web Store review requires an explicit, plain-English justification for ea
 |------------|------|----------------------------------------------------|
 | `storage` | permissions | Used solely to save the user's volume settings, scroll step preferences, night mode status, and per-site volume levels locally via chrome.storage.local. No data leaves the device. |
 | `activeTab` | permissions | Used exclusively when the user clicks the toolbar popup icon to identify the current website's hostname so that site-specific volume preferences and on/off status can be displayed and adjusted. |
-| `<all_urls>` | content_scripts | Required to detect HTML5 `<video>` and `<audio>` elements and Web Audio playback across all websites and local HTML files where users play media, enabling the Alt + Wheel volume adjustment and Volume Guard feature. The scripts also run in `about:blank` and `srcdoc` frames (`match_origin_as_fallback`) so embedded players are covered. Only volume is changed; no page content is read or sent anywhere. |
+| `<all_urls>` | content_scripts | Required to detect HTML5 `<video>` and `<audio>` elements (including those inside web-component players' shadow DOM, such as Reddit's) and Web Audio playback across all websites and local HTML files where users play media, enabling the Alt + Wheel volume adjustment and Volume Guard feature. The scripts also run in `about:blank` and `srcdoc` frames (`match_origin_as_fallback`) so embedded players are covered. Only volume and mute state are changed; no page content is read or sent anywhere. |
 
 ---
 

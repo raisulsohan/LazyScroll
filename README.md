@@ -9,6 +9,7 @@ preferred volume separately for every website.
 ## Features
 
 * **Alt + Wheel volume control** — hold Alt and scroll over any player to adjust the volume
+* **Modern web players** — works with players built as web components (shadow DOM), such as Reddit's
 * **Web Audio support** — also controls pages that play sound without a `<video>` or `<audio>` element, such as canvas animations and games
 * **Local HTML files** — works on pages opened straight from your computer (`file://`)
 * **Per-site volume memory** — your volume is saved separately for each website
@@ -33,6 +34,19 @@ player to change the volume.
 
 LazyScroll remembers the volume you set for each website, so the next time you
 visit, it starts where you left off.
+
+## Web-Component Players (Reddit and others)
+
+Some sites build their video player as a web component and keep the actual
+`<video>` inside a shadow root — Reddit's player is one. LazyScroll looks
+inside those players too, so your saved volume, Alt + Wheel, the presets and
+night mode all work on them.
+
+* A player the site adds later — the next post in a feed — gets your volume
+  the moment it starts playing, so it never starts at 100%
+* The volume overlay also shows when the player is in fullscreen
+* Once you have clicked or pressed a key on the page, muted autoplay videos
+  are unmuted at your saved volume, as on Facebook and X
 
 ## Web Audio Pages
 
@@ -94,9 +108,11 @@ Open the popup (toolbar icon) to adjust:
 ## A Note on Volume Guard
 
 While LazyScroll is active on a site, it keeps the volume locked to your
-chosen level — so the site's own volume slider may not take effect. If you want
-to use a site's native volume controls instead, turn off **Extension active**
-for that site in the popup.
+chosen level — so the site's own volume slider may not take effect. After you
+have clicked or pressed a key on the page, it also unmutes muted autoplay
+videos at that level.
+If you want to use a site's native volume controls instead, turn off
+**Extension active** for that site in the popup.
 
 ## Supported Browsers
 

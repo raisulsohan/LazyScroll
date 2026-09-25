@@ -1,6 +1,6 @@
 # Privacy Policy for LazyScroll
 
-Last Updated: September 25, 2026 (version 2.1)
+Last Updated: September 25, 2026 (version 2.2)
 
 ## Overview
 LazyScroll ("the Extension") is developed by Raisul Sohan. We believe that your privacy is fundamental. This Privacy Policy outlines how LazyScroll handles user information.
@@ -26,6 +26,7 @@ All data remains strictly inside your local browser instance and never leaves yo
 ## 3. Web Page Access
 LazyScroll interacts with web pages solely to detect HTML5 `<video>` and `<audio>` elements for adjusting and holding media playback volume when you hold `Alt` and scroll your mouse wheel. It does not read or transmit any page contents, cookies, or user credentials.
 
+- **Web-component players**: Some sites (Reddit, for example) keep their video player inside a shadow root. LazyScroll looks inside these only to find the `<video>` and `<audio>` elements; it does not read or send any of their content.
 - **Web Audio**: On pages that play sound through the Web Audio API, LazyScroll inserts a volume control between the page's audio and your speakers. It only changes loudness; it does not record, analyze, or save any audio. To mark such pages, it adds one attribute (`data-qs-webaudio`) to the page's root element and changes nothing else on the page.
 - **Local HTML files**: LazyScroll runs on HTML files opened from your computer only if you turn on Chrome's "Allow access to file URLs" setting for it. The popup checks only whether that setting is on; LazyScroll does not read, list, or upload your files.
 
