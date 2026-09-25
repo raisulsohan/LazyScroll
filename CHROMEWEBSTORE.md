@@ -20,6 +20,8 @@ Take complete control of web audio with your mouse wheel. LazyScroll lets you ad
 
 KEY FEATURES:
 - Alt + Mouse Wheel Volume Control: Hold Alt and scroll over any video/audio player to adjust volume smoothly. Normal scrolling remains completely unaffected.
+- Web Audio Support: Also controls pages that play sound without a video or audio element, such as canvas animations, games and custom players. Audio a page renders offline for export keeps its full volume.
+- Local HTML Files: Works on HTML pages opened straight from your computer. All local files share one remembered volume.
 - Per-Site Volume Memory: Set your desired level once; LazyScroll remembers it every time you visit that domain.
 - Ultra-Low Night Listening: Scroll down as quiet as 0.125% for ultra-sensitive headphones and late-night listening.
 - One-Click Night Mode: Flip Night Mode to instantly lower every website to a gentle, quiet level without losing individual site preferences.
@@ -36,6 +38,11 @@ HOW TO USE:
 3. An on-screen volume overlay will display the exact percentage.
 4. Click the extension toolbar icon anytime to access presets, step size adjustments, and Night Mode.
 
+On pages that play sound through Web Audio (no visible player), hold Alt and scroll anywhere on the page.
+
+LOCAL HTML FILES:
+Chrome blocks extensions on local files by default. To use LazyScroll there, open chrome://extensions, click Details under LazyScroll, turn on "Allow access to file URLs", then reload the page. The popup shows a reminder with a direct link while this is off.
+
 PERMISSIONS & PRIVACY:
 LazyScroll respects your privacy. It does not collect, store, or transmit any personal data, browsing history, or analytics. Everything stays strictly inside your browser.
 
@@ -46,7 +53,7 @@ Made by Raisul Sohan (https://raisulsohan.com).
 Productivity (or Accessibility)
 
 **Single Purpose**  
-Control and remember HTML5 media volume on any website using Alt and the mouse wheel.
+Control and remember the volume of media and Web Audio playback on any website or local HTML file using Alt and the mouse wheel.
 
 **Primary Language**  
 English
@@ -75,7 +82,7 @@ Chrome Web Store review requires an explicit, plain-English justification for ea
 |------------|------|----------------------------------------------------|
 | `storage` | permissions | Used solely to save the user's volume settings, scroll step preferences, night mode status, and per-site volume levels locally via chrome.storage.local. No data leaves the device. |
 | `activeTab` | permissions | Used exclusively when the user clicks the toolbar popup icon to identify the current website's hostname so that site-specific volume preferences and on/off status can be displayed and adjusted. |
-| `<all_urls>` | content_scripts | Required to detect HTML5 `<video>` and `<audio>` elements across all websites where users play media, enabling the Alt + Wheel volume adjustment and Volume Guard feature. |
+| `<all_urls>` | content_scripts | Required to detect HTML5 `<video>` and `<audio>` elements and Web Audio playback across all websites and local HTML files where users play media, enabling the Alt + Wheel volume adjustment and Volume Guard feature. The scripts also run in `about:blank` and `srcdoc` frames (`match_origin_as_fallback`) so embedded players are covered. Only volume is changed; no page content is read or sent anywhere. |
 
 ---
 
