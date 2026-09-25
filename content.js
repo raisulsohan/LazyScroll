@@ -7,7 +7,22 @@
   const DISABLED_KEY = "wvc:disabled";
   const NIGHT_KEY    = "wvc:night";      // global on/off
   const NIGHTVOL_KEY = "wvc:nightvol";   // the level night mode holds
-  const HOST         = location.hostname.replace(/^www\./, "");
+  // file:// pages have no hostname, so every local HTML file shares one
+  // "local files" key. Must match siteKey() in popup.js.
+  // An about:blank / srcdoc frame has no host of its own either; it belongs
+  // to whichever page embedded it, so borrow that page's key.
+  function siteKey(url) {
+    try {
+      const u = new URL(url);
+      if (u.protocol === "file:") return "local files";
+      return u.hostname.replace(/^www\./, "");
+    } catch (e) { return ""; }
+  }
+  let HOST = siteKey(location.href);
+  if (!HOST && location.ancestorOrigins && location.ancestorOrigins.length) {
+    const top = location.ancestorOrigins[0];
+    HOST = top === "file://" ? "local files" : siteKey(top);
+  }
   const VOL_KEY      = "wvc:" + HOST;
 
   const DEFAULT_STEP     = 0.005;
@@ -445,19 +460,23 @@
     // Alt is always held — fall back to any active media on the page
     // (audio-only sites where the media element is hidden)
     if (!media) media = findActiveMedia();
-    if (!media) return;
+    // no media element, but the page plays through Web Audio (guard.js routes
+    // it through a gain we control and flags the document)
+    const webAudio = !media && document.documentElement &&
+                     document.documentElement.hasAttribute("data-qs-webaudio");
+    if (!media && !webAudio) return;
 
     e.preventDefault();
     e.stopPropagation();
     altWasUsed = true;
-    if (!media.paused && !media.ended) {
+    if (media && !media.paused && !media.ended) {
       resumeTarget = media;
       resumeArmedAt = Date.now();
       resumeUntil = resumeArmedAt + RESUME_WINDOW;
     }
 
     const held = effVol();
-    const cur = held !== null ? held : (media.volume || 0);
+    const cur = held !== null ? held : (media ? (media.volume || 0) : 1);
     let idx = 0, best = Infinity;
     for (let i = 0; i < ladder.length; i++) {
       const d = Math.abs(ladder[i] - cur);
@@ -469,7 +488,7 @@
     const v = ladder[idx];
 
     persistVol(v);
-    ensureUnmuted(media);
+    if (media) ensureUnmuted(media);
     showOverlay(v, e.clientX, e.clientY);
   }
   window.addEventListener("wheel", onWheel, { passive: false, capture: true });

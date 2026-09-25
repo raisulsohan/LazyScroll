@@ -103,6 +103,12 @@
     font-size: 11px; color: #76767c; line-height: 1.5;
     margin-top: 18px; padding-top: 12px; border-top: 1px solid #313137;
   }
+  .file-access {
+    display: none; margin-bottom: 12px; padding: 8px 10px;
+    background: #3a2a1a; border: 1px solid #6b4a1f; border-radius: 6px;
+    font-size: 11px; line-height: 1.45; color: #f0d2a8;
+  }
+  .file-access a { color: #ffb86b; }
   .credit {
     margin-top: 12px; text-align: center; font-size: 10px; color: #6f6f75; letter-spacing: .04em;
   }
@@ -190,6 +196,11 @@
 
   <div class="site-block">
     <div class="site-title">THIS SITE: <span id="host" style="color:#fff">&mdash;</span></div>
+
+    <div class="file-access" id="fileAccess">
+      Local files are blocked. Turn on <b>Allow access to file URLs</b> in
+      <a href="#" id="openDetails">extension details</a>, then reload the page.
+    </div>
 
     <div class="toggle-row" style="margin-top: 0;">
       <div>

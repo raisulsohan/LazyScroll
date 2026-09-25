@@ -19,6 +19,12 @@ const reverseEl = document.getElementById("reverse");
 const siteEl    = document.getElementById("siteon");
 const hostEl    = document.getElementById("host");
 const nightEl   = document.getElementById("night");
+const fileAccessEl = document.getElementById("fileAccess");
+
+document.getElementById("openDetails").addEventListener("click", (e) => {
+  e.preventDefault();
+  chrome.tabs.create({ url: "chrome://extensions/?id=" + chrome.runtime.id });
+});
 
 const quickBlock = document.getElementById("quickBlock");
 const quickTitle = document.getElementById("quickTitle");
@@ -208,9 +214,27 @@ reverseEl.addEventListener("change", () => {
 
 
 // ---- Per-site Settings ----
+// file:// pages have no hostname, so all local HTML files share one key.
+// Must match siteKey() in content.js.
+function siteKey(url) {
+  try {
+    const u = new URL(url);
+    if (u.protocol === "file:") return "local files";
+    return u.hostname.replace(/^www\./, "");
+  } catch (e) { return ""; }
+}
+
 chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
-  let host = "";
-  try { host = new URL(tabs[0].url).hostname.replace(/^www\./, ""); } catch (e) {}
+  const url = tabs[0] && tabs[0].url;
+  const host = siteKey(url);
+
+  // Chrome keeps content scripts out of file:// pages until the user turns on
+  // "Allow access to file URLs" for the extension, so say that plainly.
+  if (host === "local files") {
+    chrome.extension.isAllowedFileSchemeAccess((allowed) => {
+      if (!allowed) fileAccessEl.style.display = "block";
+    });
+  }
 
   if (!host) {
     hostEl.textContent = "not available here";
