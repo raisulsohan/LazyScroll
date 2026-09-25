@@ -109,7 +109,7 @@ Requires a Chromium-based browser, version 111 or newer (LazyScroll relies on
 
 ## Installation
 
-1. Download `LazyScroll-v2.1.zip` from the [latest release](https://github.com/raisulsohan/LazyScroll/releases/latest) and unzip it, or clone this repository
+1. Download `LazyScroll-v2.2.zip` from the [latest release](https://github.com/raisulsohan/LazyScroll/releases/latest) and unzip it, or clone this repository
 2. Open `chrome://extensions`
 3. Enable **Developer mode**
 4. Click **Load unpacked**

@@ -1,7 +1,7 @@
 # Chrome Web Store Listing — LazyScroll
 
 > Last Updated: 2026-09-25  
-> Extension Version: 2.1  
+> Extension Version: 2.2  
 > Author: Made by Raisul Sohan (https://raisulsohan.com)
 
 ---
