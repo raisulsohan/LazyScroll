@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
   "name": "LazyScroll",
-  "version": "2.0",
+  "version": "2.1",
   "description": "Smart per-site volume control with Alt + Wheel. Features night mode, ultra-low presets, and volume guard for peaceful browsing.",
   "author": "Raisul Sohan",
   "homepage_url": "https://raisulsohan.com",
