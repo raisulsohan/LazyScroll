@@ -64,6 +64,49 @@
     liveMasters.forEach(g => { try { g.gain.value = v; } catch (err) {} });
   }
 
+  // ---- shadow DOM ----
+  // Web-component players (Reddit's <shreddit-player> and others) keep their
+  // <video> inside a shadow root, out of reach of document.querySelectorAll.
+  // Open roots are found through element.shadowRoot. A closed root can only
+  // be reached through the reference attachShadow returns, so those are kept
+  // (weakly, so a removed player can still be collected).
+  const closedRoots = [];
+  const origAttach = Element.prototype.attachShadow;
+  Element.prototype.attachShadow = function () {
+    const root = origAttach.apply(this, arguments);
+    if (root.mode === 'closed') closedRoots.push(new WeakRef(root));
+    return root;
+  };
+
+  // A player the page adds later (the next post in a feed, often inside a
+  // shadow root) is only found by the next scan, up to half a second on. If
+  // it starts playing before then, it would play those moments at 100%, so
+  // the locked volume is also applied the moment play() is called.
+  const origPlay = HTMLMediaElement.prototype.play;
+  HTMLMediaElement.prototype.play = function () {
+    // no _qsSiteVol snapshot here: the element may already hold the locked
+    // value, and recording that would "restore" it when the lock is released
+    if (lockedVol !== null) {
+      try { origVol.set.call(this, lockedVol); } catch (err) {}
+    }
+    return origPlay.apply(this, arguments);
+  };
+
+  function allMedia() {
+    const roots = [document];
+    for (let i = closedRoots.length - 1; i >= 0; i--) {
+      const r = closedRoots[i].deref();
+      if (r) roots.push(r); else closedRoots.splice(i, 1);
+    }
+    const out = [];
+    for (let i = 0; i < roots.length; i++) {
+      const r = roots[i];
+      r.querySelectorAll('video, audio').forEach(m => out.push(m));
+      r.querySelectorAll('*').forEach(el => { if (el.shadowRoot) roots.push(el.shadowRoot); });
+    }
+    return out;
+  }
+
   window.addEventListener('qs-set-vol', (e) => {
     const next = e.detail;
     const was = lockedVol;
@@ -71,7 +114,7 @@
     setMasters(next === null ? 1 : next);
 
     if (next !== null) {
-      document.querySelectorAll('video, audio').forEach(m => {
+      allMedia().forEach(m => {
         try {
           // লক শুরুর মুহূর্তে সাইটের নিজের ভলিউমটা স্ন্যাপশট করে রাখি
           if (was === null && m._qsSiteVol === undefined) m._qsSiteVol = origVol.get.call(m);
@@ -81,7 +124,7 @@
     } else if (was !== null) {
       // লক ছাড়া হলো (যেমন Night mode বন্ধ) — সাইট যে ভলিউম চেয়েছিল সেটাই ফিরিয়ে দিই।
       // কিছু মনে না থাকলে ব্রাউজারের ডিফল্ট ১০০%, কারণ ওখান থেকেই শুরু হয়েছিল।
-      document.querySelectorAll('video, audio').forEach(m => {
+      allMedia().forEach(m => {
         try {
           const back = m._qsSiteVol;
           delete m._qsSiteVol;

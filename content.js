@@ -228,7 +228,7 @@
       return;
     }
     syncToMainWorld(v);
-    document.querySelectorAll("video, audio").forEach(ensureUnmuted);
+    allMedia().forEach(ensureUnmuted);
   }
 
   // single document-wide pass: re-broadcast the locked volume + unmute (throttled)
@@ -236,7 +236,47 @@
     const v = effVol();
     if (dead || !siteEnabled || v == null) return;
     syncToMainWorld(v);
-    document.querySelectorAll("video, audio").forEach(ensureUnmuted);
+    allMedia().forEach(ensureUnmuted);
+  }
+
+  // ---- shadow DOM ----
+  // Players built as web components (Reddit's <shreddit-player>, many others)
+  // keep their <video> inside a shadow root. document.querySelectorAll,
+  // elementsFromPoint and document-level listeners never look in there, and
+  // media events (play, volumechange...) are not composed, so they stop at the
+  // root instead of reaching document. Every root found is therefore hooked
+  // with the same listeners and the same MutationObserver as the document.
+  const canSeeClosed = !!(chrome.dom && chrome.dom.openOrClosedShadowRoot);
+  function shadowOf(el) {
+    if (el.shadowRoot) return el.shadowRoot;
+    // closed roots: only custom elements are checked, to keep the walk cheap
+    if (!canSeeClosed || !el.localName.includes("-")) return null;
+    try { return chrome.dom.openOrClosedShadowRoot(el) || null; } catch (e) { return null; }
+  }
+
+  const hookedRoots = new WeakSet();
+  function hookRoot(root) {
+    if (hookedRoots.has(root)) return;
+    hookedRoots.add(root);
+    hookMediaEvents(root);
+    try { if (mo && !dead) mo.observe(root, { childList: true, subtree: true }); } catch (e) {}
+  }
+
+  // every <video>/<audio> in the document and in any shadow root inside it
+  function allMedia() {
+    const out = [];
+    const roots = [document];
+    for (let i = 0; i < roots.length; i++) {
+      const r = roots[i];
+      if (r !== document) hookRoot(r);
+      r.querySelectorAll("video, audio").forEach((m) => out.push(m));
+      const els = r.querySelectorAll("*");
+      for (let j = 0; j < els.length; j++) {
+        const sr = shadowOf(els[j]);
+        if (sr) roots.push(sr);
+      }
+    }
+    return out;
   }
 
   // ---- volume responds instantly every notch; only the storage write is debounced ----
@@ -333,19 +373,32 @@
   });
 
   // ---- SMART MEDIA FINDER ----
+  // A shadow host only shows up as itself in elementsFromPoint, so each host
+  // under the cursor is searched through its own root. A root's list repeats
+  // the outer elements too, hence the `seen` set.
   function mediaAtPoint(x, y) {
-    const elements = document.elementsFromPoint(x, y);
-    for (const el of elements) {
-      if (el.tagName === "VIDEO" || el.tagName === "AUDIO") return el;
+    const seen = new Set();
+    function search(root) {
+      seen.add(root);
+      if (root !== document) hookRoot(root);
+      for (const el of root.elementsFromPoint(x, y)) {
+        if (el.tagName === "VIDEO" || el.tagName === "AUDIO") return el;
+        const sr = shadowOf(el);
+        if (sr && !seen.has(sr)) {
+          const m = search(sr);
+          if (m) return m;
+        }
+      }
+      return null;
     }
-    return null;
+    return search(document);
   }
 
   // fallback for audio-only sites (YouTube Music, Suno, etc) where the
   // media element exists in DOM but isn't where the cursor is. returns
   // the first playing media, or any media with a loaded source.
   function findActiveMedia() {
-    const all = document.querySelectorAll("video, audio");
+    const all = allMedia();
     for (const m of all) {
       if (!m.paused && !m.ended && m.readyState > 0) return m;
     }
@@ -366,8 +419,19 @@
     return p.toFixed(4);
   }
 
+  // In a web-component player, document.fullscreenElement is only the shadow
+  // host; the element really in fullscreen sits inside its root, and light-DOM
+  // children of a host aren't rendered. So follow the chain down and draw
+  // inside the innermost root.
+  function overlayHost() {
+    let fs = document.fullscreenElement;
+    if (!fs) return document.body;
+    while (fs.shadowRoot && fs.shadowRoot.fullscreenElement) fs = fs.shadowRoot.fullscreenElement;
+    return fs.shadowRoot || fs;
+  }
+
   function showOverlay(v, x, y) {
-    const host = document.fullscreenElement || document.body;
+    const host = overlayHost();
     if (!host) return;
     if (!overlayEl || overlayEl.parentNode !== host) {
       if (overlayEl && overlayEl.parentNode) overlayEl.parentNode.removeChild(overlayEl);
@@ -436,7 +500,7 @@
     if (e.key !== "Alt") lastUserInputAt = Date.now();
   }, { capture: true, passive: true });
 
-  document.addEventListener("pause", (e) => {
+  function onPause(e) {
     if (dead || !siteEnabled) return;
     const t = e.target;
     if (t !== resumeTarget || t.ended) return;
@@ -449,7 +513,7 @@
       const p = t.play();
       if (p && p.catch) p.catch(() => {});
     } catch (err) {}
-  }, true);
+  }
 
   function onWheel(e) {
     if (dead || !siteEnabled) return;
@@ -499,7 +563,7 @@
     setTimeout(scanAndApply, 500);
   });
 
-  document.addEventListener("volumechange", (e) => {
+  function onVolumeChange(e) {
     const target = effVol();
     if (dead || !siteEnabled || target == null) return;
     const t = e.target;
@@ -508,7 +572,7 @@
       syncToMainWorld(target);
     }
     ensureUnmuted(t);
-  }, true);
+  }
 
   // ---- FIX: playback events are debounced into ONE coalesced pass.
   // Previously each of 5 events fired syncToMainWorld separately -> a burst of
@@ -519,19 +583,28 @@
     clearTimeout(playbackTimer);
     playbackTimer = setTimeout(scanAndApply, 150);
   }
-  ["loadstart", "canplay", "play", "playing", "loadedmetadata"].forEach((evt) => {
-    document.addEventListener(evt, onPlaybackEvent, true);
-  });
 
   // Each new playback session gets a fresh unmute burst, so a feed preview that
   // is hovered again — or a reel the site swapped in — starts from a clean
   // budget instead of inheriting the slow rate from the previous one.
-  ["play", "playing"].forEach((evt) => {
-    document.addEventListener(evt, (e) => {
-      const t = e.target;
-      if (t && (t.tagName === "VIDEO" || t.tagName === "AUDIO")) t._qsUnmuteTries = 0;
-    }, true);
-  });
+  function onPlayReset(e) {
+    const t = e.target;
+    if (t && (t.tagName === "VIDEO" || t.tagName === "AUDIO")) t._qsUnmuteTries = 0;
+  }
+
+  // Media events don't cross a shadow boundary, so the document and every
+  // shadow root found by hookRoot() get this same set of listeners.
+  function hookMediaEvents(target) {
+    target.addEventListener("pause", onPause, true);
+    target.addEventListener("volumechange", onVolumeChange, true);
+    ["loadstart", "canplay", "play", "playing", "loadedmetadata"].forEach((evt) => {
+      target.addEventListener(evt, onPlaybackEvent, true);
+    });
+    ["play", "playing"].forEach((evt) => {
+      target.addEventListener(evt, onPlayReset, true);
+    });
+  }
+  hookMediaEvents(document);
 
   // ---- MutationObserver: O(1) callback, single debounced full scan ----
   let moTimer = null;
