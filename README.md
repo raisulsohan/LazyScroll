@@ -145,6 +145,12 @@ Requires a Chromium-based browser, version 111 or newer (LazyScroll relies on
 4. Click **Load unpacked**
 5. Select the LazyScroll folder
 
+## Documentation
+
+- [User guide](docs/user-guide.md) — the volume ladder, per-site memory, Volume Guard, night mode, every popup control, and troubleshooting.
+- [Developer guide](docs/developer-guide.md) — the two content-script worlds, the storage schema, how Alt + Wheel is handled, and how to work on the code.
+- [Changelog](CHANGELOG.md) — what changed in each version.
+
 ## Privacy Policy
 
 LazyScroll does not collect or transmit any user data. Read our full [Privacy Policy](PRIVACY.md).
