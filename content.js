@@ -9,8 +9,6 @@
   const NIGHTVOL_KEY = "wvc:nightvol";   // the level night mode holds
   // file:// pages have no hostname, so every local HTML file shares one
   // "local files" key. Must match siteKey() in popup.js.
-  // An about:blank / srcdoc frame has no host of its own either; it belongs
-  // to whichever page embedded it, so borrow that page's key.
   function siteKey(url) {
     try {
       const u = new URL(url);
@@ -18,11 +16,19 @@
       return u.hostname.replace(/^www\./, "");
     } catch (e) { return ""; }
   }
-  let HOST = siteKey(location.href);
-  if (!HOST && location.ancestorOrigins && location.ancestorOrigins.length) {
-    const top = location.ancestorOrigins[0];
-    HOST = top === "file://" ? "local files" : siteKey(top);
+  // A frame takes the key of the page in the address bar, not its own origin:
+  // that is the site the popup shows and sets. Google Drive, for example,
+  // plays its videos in a youtube.googleapis.com frame; under its own key
+  // that frame never saw the volume set for drive.google.com. The last
+  // ancestor origin is the top-level page; an opaque one ("null") falls back
+  // to the frame's own key.
+  function frameSiteKey() {
+    const own = siteKey(location.href);
+    const anc = location.ancestorOrigins;
+    if (window === window.top || !anc || !anc.length) return own;
+    return siteKey(anc[anc.length - 1]) || own;
   }
+  const HOST         = frameSiteKey();
   const VOL_KEY      = "wvc:" + HOST;
 
   const DEFAULT_STEP     = 0.005;
@@ -376,13 +382,13 @@
   // A shadow host only shows up as itself in elementsFromPoint, so each host
   // under the cursor is searched through its own root. A root's list repeats
   // the outer elements too, hence the `seen` set.
-  function mediaAtPoint(x, y) {
+  function atPoint(x, y, match) {
     const seen = new Set();
     function search(root) {
       seen.add(root);
       if (root !== document) hookRoot(root);
       for (const el of root.elementsFromPoint(x, y)) {
-        if (el.tagName === "VIDEO" || el.tagName === "AUDIO") return el;
+        if (match(el)) return el;
         const sr = shadowOf(el);
         if (sr && !seen.has(sr)) {
           const m = search(sr);
@@ -393,6 +399,10 @@
     }
     return search(document);
   }
+  const isMedia = (el) => el.tagName === "VIDEO" || el.tagName === "AUDIO";
+  const isFrame = (el) => el.tagName === "IFRAME" || el.tagName === "FRAME";
+  function mediaAtPoint(x, y) { return atPoint(x, y, isMedia); }
+  function frameAtPoint(x, y) { return atPoint(x, y, isFrame); }
 
   // fallback for audio-only sites (YouTube Music, Suno, etc) where the
   // media element exists in DOM but isn't where the cursor is. returns
@@ -521,14 +531,21 @@
     if (!e.altKey) return;
 
     let media = mediaAtPoint(e.clientX, e.clientY);
+    // A player inside a frame that the page covers with a layer of its own
+    // never gets the wheel — this document does. Google Drive draws its
+    // controls over the youtube.googleapis.com frame that plays the video.
+    // The frame shares this page's volume key (see frameSiteKey), so saving
+    // the level here is enough: storage carries it into the frame, whose own
+    // script applies it.
+    const frame = media ? null : frameAtPoint(e.clientX, e.clientY);
     // Alt is always held — fall back to any active media on the page
     // (audio-only sites where the media element is hidden)
-    if (!media) media = findActiveMedia();
+    if (!media && !frame) media = findActiveMedia();
     // no media element, but the page plays through Web Audio (guard.js routes
     // it through a gain we control and flags the document)
-    const webAudio = !media && document.documentElement &&
+    const webAudio = !media && !frame && document.documentElement &&
                      document.documentElement.hasAttribute("data-qs-webaudio");
-    if (!media && !webAudio) return;
+    if (!media && !frame && !webAudio) return;
 
     e.preventDefault();
     e.stopPropagation();
@@ -552,6 +569,9 @@
     const v = ladder[idx];
 
     persistVol(v);
+    // the frame only hears about the change through storage, so don't make
+    // it wait for the debounced write
+    if (frame) flushSave();
     if (media) ensureUnmuted(media);
     showOverlay(v, e.clientX, e.clientY);
   }
