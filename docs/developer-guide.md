@@ -227,7 +227,7 @@ Useful test pages: YouTube (playlists and in-page navigation), YouTube Music (hi
 
 1. Bump `version` in `manifest.json`; update the version and date in `CHROMEWEBSTORE.md` and `PRIVACY.md`, and the release file name in `README.md`.
 2. Add the changes to `CHANGELOG.md`.
-3. Zip `manifest.json`, `popup.html`, `popup.js`, `content.js`, `guard.js` and `icons/`, as described in `CHROMEWEBSTORE.md`.
+3. Build `LazyScroll-vX.Y.zip` with `manifest.json`, `popup.html`, `popup.js`, `content.js`, `guard.js`, `LICENSE` and `icons/` at the top level (no wrapping folder). The Chrome Web Store upload is the same without `LICENSE`, as described in `CHROMEWEBSTORE.md`.
 4. Tag `vX.Y`, push the tag, and create a GitHub release with `LazyScroll-vX.Y.zip` attached.
 
 ## Permissions and compatibility
