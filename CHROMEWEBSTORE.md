@@ -1,7 +1,7 @@
 # Chrome Web Store Listing — LazyScroll
 
-> Last Updated: 2026-09-25  
-> Extension Version: 2.2  
+> Last Updated: 2026-09-27  
+> Extension Version: 2.3  
 > Author: Made by Raisul Sohan (https://raisulsohan.com)
 
 ---
@@ -21,6 +21,7 @@ Take complete control of web audio with your mouse wheel. LazyScroll lets you ad
 KEY FEATURES:
 - Alt + Mouse Wheel Volume Control: Hold Alt and scroll over any video/audio player to adjust volume smoothly. Normal scrolling remains completely unaffected.
 - Modern Web Players: Works with players built as web components, such as Reddit's. Videos a site adds later, like the next post in a feed, start at your volume instead of 100%.
+- Embedded Players: Players inside frames, like Google Drive's video preview, follow the volume you set for the page, and Alt + Wheel works even when the site draws its own controls over the player.
 - Web Audio Support: Also controls pages that play sound without a video or audio element, such as canvas animations, games and custom players. Audio a page renders offline for export keeps its full volume.
 - Local HTML Files: Works on HTML pages opened straight from your computer. All local files share one remembered volume.
 - Per-Site Volume Memory: Set your desired level once; LazyScroll remembers it every time you visit that domain.

@@ -1,6 +1,6 @@
 # Privacy Policy for LazyScroll
 
-Last Updated: September 25, 2026 (version 2.2)
+Last Updated: September 27, 2026 (version 2.3)
 
 ## Overview
 LazyScroll ("the Extension") is developed by Raisul Sohan. We believe that your privacy is fundamental. This Privacy Policy outlines how LazyScroll handles user information.
@@ -19,7 +19,7 @@ LazyScroll uses Chrome's local storage API (`chrome.storage.local`) exclusively 
 - Per-website volume levels that you explicitly adjust using Alt + Wheel.
 - Per-website enable/disable toggles.
 
-Websites are identified only by their hostname (for example, `youtube.com`). HTML files opened from your computer are all stored under one shared label, "local files"; LazyScroll never stores their file names, folder paths, or contents.
+Websites are identified only by their hostname (for example, `youtube.com`). A player embedded in a page (such as the video frame in Google Drive's preview) is stored under the hostname of the page you are viewing. HTML files opened from your computer are all stored under one shared label, "local files"; LazyScroll never stores their file names, folder paths, or contents.
 
 All data remains strictly inside your local browser instance and never leaves your computer.
 

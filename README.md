@@ -10,6 +10,7 @@ preferred volume separately for every website.
 
 * **Alt + Wheel volume control** — hold Alt and scroll over any player to adjust the volume
 * **Modern web players** — works with players built as web components (shadow DOM), such as Reddit's
+* **Embedded players** — players inside frames, like Google Drive's video preview, follow the volume you set for the page
 * **Web Audio support** — also controls pages that play sound without a `<video>` or `<audio>` element, such as canvas animations and games
 * **Local HTML files** — works on pages opened straight from your computer (`file://`)
 * **Per-site volume memory** — your volume is saved separately for each website
@@ -47,6 +48,19 @@ night mode all work on them.
 * The volume overlay also shows when the player is in fullscreen
 * Once you have clicked or pressed a key on the page, muted autoplay videos
   are unmuted at your saved volume, as on Facebook and X
+
+## Embedded Players (Google Drive and others)
+
+Some sites play video in a frame from another address. Google Drive's preview
+plays in a frame from `youtube.googleapis.com`, and many sites embed YouTube
+the same way. LazyScroll treats everything in a tab as the site shown in the
+address bar, so the popup, the presets and night mode reach players inside
+frames too.
+
+* Alt + Wheel works even when the site draws its own controls over the
+  player, as Google Drive does
+* An embedded player uses the volume of the page it is on, not of its own
+  site — a YouTube video embedded on a blog follows the blog's volume
 
 ## Web Audio Pages
 
@@ -125,7 +139,7 @@ Requires a Chromium-based browser, version 111 or newer (LazyScroll relies on
 
 ## Installation
 
-1. Download `LazyScroll-v2.2.zip` from the [latest release](https://github.com/raisulsohan/LazyScroll/releases/latest) and unzip it, or clone this repository
+1. Download `LazyScroll-v2.3.zip` from the [latest release](https://github.com/raisulsohan/LazyScroll/releases/latest) and unzip it, or clone this repository
 2. Open `chrome://extensions`
 3. Enable **Developer mode**
 4. Click **Load unpacked**
