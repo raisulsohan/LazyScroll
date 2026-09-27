@@ -2,6 +2,12 @@
 
 All notable changes to LazyScroll are listed here. Version numbers follow the `version` field in `manifest.json`. Releases from 2.1 on are tagged and have a ZIP attached on the [releases page](https://github.com/raisulsohan/LazyScroll/releases).
 
+## Unreleased
+
+### Added
+
+- MIT license file.
+
 ## [2.3] — 2026-09-27
 
 ### Added

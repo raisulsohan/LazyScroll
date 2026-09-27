@@ -158,3 +158,7 @@ LazyScroll does not collect or transmit any user data. Read our full [Privacy Po
 ## Author
 
 Made by [Raisul Sohan](https://raisulsohan.com)
+
+## License
+
+[MIT](LICENSE) © [Raisul Sohan](https://raisulsohan.com)
